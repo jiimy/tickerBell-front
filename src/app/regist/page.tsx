@@ -69,6 +69,54 @@ const Index = () => {
     })
   }
 
+  const onClickCertification = () => {
+    if (!window.IMP) return;
+    /* 1. 가맹점 식별하기 */
+    const { IMP } = window;
+    IMP.init("imp87773672"); // 가맹점 식별코드
+
+    // /* 2. 본인인증 데이터 정의하기 */
+    const data = {
+      merchant_uid: `mid_${new Date().getTime()}`,  // 주문번호
+      // company: '아임포트',                           // 회사명 또는 URL
+      // // pg: "html5_inicis",
+      // carrier: 'SKT',                              // 통신사
+      // name: '홍길동',                                // 이름
+      // phone: '01012341234',                        // 전화번호
+    };
+
+    /* 4. 본인인증 창 호출하기 */
+    IMP.certification(data, callback);
+    //     IMP.certification({
+    //       pg: "html5_inicis",
+    //       merchant_uid: "ORD20180131-0000011",
+    //       popup: false 
+    //     }, function (rsp) { // callback
+    //       console.log('res', rsp);
+    //       if (rsp.success) {
+    //       // 인증 성공 시 로직,
+    //     } else {
+    //       // 인증 실패 시 로직,
+    //     }
+    // });
+  }
+
+  /* 3. 콜백 함수 정의하기 */
+  function callback(response: any) {
+    const {
+      success,
+      merchant_uid,
+      error_msg,
+    } = response;
+
+    if (success) {
+      alert('본인인증 성공');
+    } else {
+      alert(`본인인증 실패: ${error_msg}`);
+    }
+  }
+
+
   return (
     <div className='flex h-screen max-w-400 m-auto flex-col justify-center items-center'>
       <Button onClick={KakaoLogout}>로그아웃</Button>
@@ -89,7 +137,7 @@ const Index = () => {
         {(tab === 1 || tab === 2) &&
           <div className='mt-40'>
             <div>
-              <div className='gap-6'>
+              <div className='flex gap-6'>
                 <label>이름</label>
                 <input type="text"
                   id="username"
@@ -107,7 +155,7 @@ const Index = () => {
               {errors.username && <small role="alert">{errors.username.message}</small>}
             </div>
             <div>
-              <div className='gap-6'>
+              <div className='flex gap-6'>
                 <label>비밀번호</label>
                 <input type="password"
                   id="password"
@@ -127,6 +175,16 @@ const Index = () => {
                 />
               </div>
               {errors.password && <small role="alert">{errors.password.message}</small>}
+            </div>
+            <div>
+              <div className='flex gap-6'>
+                <label>전화번호</label>
+                <input type="password"
+                  id="password"
+                  placeholder='비밀번호를 입력해주세요'
+                />
+                <Button onClick={onClickCertification}>본인인증</Button>
+              </div>
             </div>
           </div>}
       </div>

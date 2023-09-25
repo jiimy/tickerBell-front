@@ -387,6 +387,19 @@ export interface PaypalRequestPayParams extends RequestPayParams {
 }
 
 export interface Iamport {
+  certification(
+    data: {
+      merchant_uid?: string;
+      company?: string;
+      carrier?: string;
+      name?: string;
+      phone?: string;
+      pg?: string;
+      m_redirect_url?: string;
+      popup?: boolean
+    },
+    callback: (response: any) => void
+  ): unknown;
   init: (accountID: string) => void;
   request_pay: (params: RequestPayParams, callback?: RequestPayResponseCallback) => void;
   loadUI: (type: PaypalUI, params: PaypalRequestPayParams, callback?: RequestPayResponseCallback) => void;
